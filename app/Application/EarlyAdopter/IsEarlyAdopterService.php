@@ -7,7 +7,6 @@ use Exception;
 
 class IsEarlyAdopterService
 {
-    //holaa soy oihana
     /**
      * @var UserDataSource
      */
