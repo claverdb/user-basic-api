@@ -26,7 +26,9 @@
         "phpro/grumphp": "^1.10",
         "phpunit/phpunit": "^9.3.3",
         "sebastian/phpcpd": "^6.0",
-        "squizlabs/php_codesniffer": "^3.6"
+        "squizlabs/php_codesniffer": "^3.6",
+        "phpmd/phpmd": "@stable",
+        "friendsofphp/php-cs-fixer": "v3.3.0"
     },
     "config": {
         "optimize-autoloader": true,
