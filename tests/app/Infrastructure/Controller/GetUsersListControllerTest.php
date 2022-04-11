@@ -35,7 +35,7 @@ class GetUsersListControllerTest extends TestCase
 
         $response = $this->get("/api/users/list");
 
-        $response->assertExactJson([]);
+        $response->assertStatus(Response::HTTP_OK)->assertExactJson([]);
     }
 
     /**
