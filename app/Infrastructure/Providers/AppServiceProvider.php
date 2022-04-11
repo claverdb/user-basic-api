@@ -2,6 +2,7 @@
 
 namespace App\Infrastructure\Providers;
 
+use App\Application\UserDataSource\FakeUserDataSource;
 use App\Application\UserDataSource\FakeDataSource;
 use App\Application\UserDataSource\UserDataSource;
 use App\DataSource\Database\EloquentUserDataSource;
@@ -26,6 +27,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $this->app->bind(UserDataSource::class, function () {
+            return new FakeUserDataSource();
+        });
         $this->app->bind(UserDataSource::class, function () {
             return new FakeDataSource();
         });
