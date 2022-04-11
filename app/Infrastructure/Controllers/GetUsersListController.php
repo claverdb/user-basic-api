@@ -31,8 +31,8 @@ class GetUsersListController extends BaseController
                 'error' => "Hubo un error al realizar la peticion"
             ], Response::HTTP_BAD_REQUEST);
         }
-        foreach($getUsersList as $user) {
-            $users_id[] = ["id"=>$user->getId()];
+        foreach ($getUsersList as $user) {
+            $users_id[] = ["id" => $user->getId()];
         }
 
         return response()->json($users_id, Response::HTTP_OK);

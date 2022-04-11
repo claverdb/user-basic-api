@@ -60,4 +60,22 @@ class GetUsersListControllerTest extends TestCase
         $response->assertStatus(Response::HTTP_OK)->assertExactJson([['id' => 1],['id' => 2],['id' => 3]]);
     }
 
+    /**
+     * @test
+     */
+    public function genericErrorGiven()
+    {
+
+        $this->userDataSource
+            ->expects('listedUsers')
+            ->withNoArgs()
+            ->once()
+            ->andThrow(new Exception("Any exception"));
+
+        $response = $this->get("/api/users/list");
+
+        $response->assertStatus(Response::HTTP_BAD_REQUEST)->assertExactJson([
+            'error' => "Hubo un error al realizar la peticion"
+        ]);
+    }
 }

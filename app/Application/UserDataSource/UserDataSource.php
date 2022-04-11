@@ -4,9 +4,9 @@ namespace App\Application\UserDataSource;
 
 use App\Domain\User;
 
-Interface UserDataSource
+interface UserDataSource
 {
     public function findByEmail(string $email): User;
 
-    public function listedUsers():array;
+    public function listedUsers(): array;
 }
