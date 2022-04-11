@@ -30,15 +30,30 @@ class GetUserDataControllerTest extends TestCase
     public function userWithGivenIdReturnsGenericError()
     {
         $this->userDataSource
-            ->expects('findByEmail')
+            ->expects('findById')
             ->never();
-        //->with('another@email.com')
+        //->with(1)
         //->once()
-        //->andThrow(new Exception('User not found'));
+        //->andThrow(new Exception('Error al realizar la petición'));
 
         $response = $this->get('/api/users/1');
 
         $response->assertStatus(Response::HTTP_BAD_REQUEST)
                 ->assertExactJson(['error' => 'Hubo un error al realizar la petición']);
+    }
+
+    /**
+     * @test
+     */
+    public function userWithNotGivenIdReturnsError()
+    {
+        $this->userDataSource
+            ->expects('findById')
+            ->never();
+
+        $response = $this->get('/api/users/');
+
+        $response->assertStatus(Response::HTTP_BAD_REQUEST)
+            ->assertExactJson(['error' => 'El id de usuario es obligatorio']);
     }
 }
