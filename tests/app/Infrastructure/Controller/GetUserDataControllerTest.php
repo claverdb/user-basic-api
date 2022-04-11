@@ -31,15 +31,14 @@ class GetUserDataControllerTest extends TestCase
     {
         $this->userDataSource
             ->expects('findById')
-            ->never();
-        //->with(1)
-        //->once()
-        //->andThrow(new Exception('Error al realizar la petición'));
+            ->with(1)
+            ->once()
+            ->andThrow(new Exception('Error al realizar la petición'));
 
         $response = $this->get('/api/users/1');
 
         $response->assertStatus(Response::HTTP_BAD_REQUEST)
-                ->assertExactJson(['error' => 'Hubo un error al realizar la petición']);
+                ->assertExactJson(['error' => 'Hubo un error al realizar la peticion']);
     }
 
     /**
@@ -54,6 +53,23 @@ class GetUserDataControllerTest extends TestCase
         $response = $this->get('/api/users/');
 
         $response->assertStatus(Response::HTTP_BAD_REQUEST)
-            ->assertExactJson(['error' => 'El id de usuario es obligatorio']);
+                ->assertExactJson(['error' => 'El id de usuario es obligatorio']);
+    }
+
+    /**
+     * @test
+     */
+    public function userWithGivenIdDoesNotExistAndReturnsError()
+    {
+        $this->userDataSource
+            ->expects('findById')
+            ->with(999)
+            ->once()
+            ->andThrow(new Exception('Usuario no encontrado'));
+
+        $response = $this->get('/api/users/999');
+
+        $response->assertStatus(Response::HTTP_BAD_REQUEST)
+                ->assertExactJson(['error' => 'Usuario no encontrado']);
     }
 }
