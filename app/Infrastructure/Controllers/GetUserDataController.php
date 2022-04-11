@@ -29,17 +29,22 @@ class GetUserDataController extends BaseController
         }
 
         try {
-            $this->getUserDataService->execute($id);
+            $user = $this->getUserDataService->execute($id);
         } catch (Exception $exception) {
             if ($exception->getMessage() == 'Usuario no encontrado') {
                 return response()->json([
                     'error' => $exception->getMessage()
                 ], Response::HTTP_BAD_REQUEST);
+            } else {
+                return response()->json([
+                    'error' => 'Hubo un error al realizar la peticion'
+                ], Response::HTTP_BAD_REQUEST);
             }
         }
 
         return response()->json([
-            'error' => 'Hubo un error al realizar la peticion'
-        ], Response::HTTP_BAD_REQUEST);
+            'id' => $user->getId(),
+            'email' => $user->getEmail()
+        ], Response::HTTP_OK);
     }
 }

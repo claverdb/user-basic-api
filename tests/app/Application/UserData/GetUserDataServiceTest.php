@@ -33,7 +33,7 @@ class GetUserDataServiceTest extends TestCase
     {
         $id = 1;
 
-        $user = new User($id, 'email@email.com');
+        $user = new User($id, 'user@user.com');
 
         $this->userDataSource
             ->expects('findById')
@@ -62,5 +62,24 @@ class GetUserDataServiceTest extends TestCase
         $this->expectException(Exception::class);
 
         $this->getUserDataService->execute($id);
+    }
+
+    /**
+     * @test
+     */
+    public function userWithGivenIdReturnsUserData()
+    {
+        $id = 1;
+        $user = new User($id, 'user@user.com');
+
+        $this->userDataSource
+            ->expects('findById')
+            ->with($id)
+            ->once()
+            ->andReturn($user);
+
+        $result = $this->getUserDataService->execute($id);
+
+        $this->assertEquals($user, $result);
     }
 }
