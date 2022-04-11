@@ -27,16 +27,37 @@ class GetUsersListControllerTest extends TestCase
     /**
      * @test
      */
-    public function noUsersFound()
+    public function noListedUsersFound()
     {
         $this->userDataSource
-            ->expects('listAll')
-            ->never();
-            //->once();
+            ->expects('listedUsers')
+            ->once();
 
         $response = $this->get("/api/users/list");
 
         $response->assertExactJson([]);
+    }
+
+    /**
+     * @test
+     */
+    public function listedUsers()
+    {
+        $user1 = new User(1, 'email@email.com');
+        $user2 = new User(2, 'email@email.com');
+        $user3 = new User(3, 'email@email.com');
+
+        $users_array = array($user1, $user2, $user3);
+
+        $this->userDataSource
+            ->expects('listedUsers')
+            ->withNoArgs()
+            ->once()
+            ->andReturn($users_array);
+
+        $response = $this->get('/api/users/list');
+
+        $response->assertStatus(Response::HTTP_OK)->assertExactJson([['id' => 1],['id' => 2],['id' => 3]]);
     }
 
 }
