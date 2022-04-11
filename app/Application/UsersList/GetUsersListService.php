@@ -27,7 +27,6 @@ class GetUsersListService
      */
     public function execute(): array
     {
-        $users = $this->userDataSource->listedUsers();
-        return $users;
+        return $this->userDataSource->listedUsers();
     }
 }

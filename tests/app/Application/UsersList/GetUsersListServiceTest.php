@@ -1,16 +1,17 @@
 <?php
 
-namespace Tests\app\Infrastrucutre\Controller;
+namespace Tests\app\Application\UsersList;
 
+use App\Application\UsersList\GetUsersListService;
 use App\Application\UserDataSource\UserDataSource;
 use App\Domain\User;
 use Exception;
-use Illuminate\Http\Response;
 use Mockery;
-use Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
-class GetUsersListControllerTest extends TestCase
+class GetUsersListServiceTest extends TestCase
 {
+    private GetUsersListService $getUsersListService;
     private UserDataSource $userDataSource;
 
     /**
@@ -21,27 +22,29 @@ class GetUsersListControllerTest extends TestCase
         parent::setUp();
 
         $this->userDataSource = Mockery::mock(UserDataSource::class);
-        $this->app->bind(UserDataSource::class, fn () => $this->userDataSource);
+
+        $this->getUsersListService = new GetUsersListService($this->userDataSource);
     }
 
     /**
      * @test
      */
-    public function noListedUsersFound()
+    public function emtpyUserListFound()
     {
         $this->userDataSource
             ->expects('listedUsers')
+            ->withNoArgs()
             ->once();
 
-        $response = $this->get("/api/users/list");
+        $getUsersListService = $this->getUsersListService->execute();
 
-        $response->assertExactJson([]);
+        $this->assertEquals($getUsersListService,[]);
     }
 
     /**
      * @test
      */
-    public function listedUsers()
+    public function notEmptyUserListFound()
     {
         $user1 = new User(1, 'email@email.com');
         $user2 = new User(2, 'email@email.com');
@@ -55,9 +58,9 @@ class GetUsersListControllerTest extends TestCase
             ->once()
             ->andReturn($users_array);
 
-        $response = $this->get('/api/users/list');
+        $getUsersListService = $this->getUsersListService->execute();
 
-        $response->assertStatus(Response::HTTP_OK)->assertExactJson([['id' => 1],['id' => 2],['id' => 3]]);
+        $this->assertEquals($getUsersListService, $users_array);
     }
 
     /**
@@ -69,12 +72,10 @@ class GetUsersListControllerTest extends TestCase
             ->expects('listedUsers')
             ->withNoArgs()
             ->once()
-            ->andThrow(new Exception("Any exception"));
+            ->andThrow(new Exception('Any exception'));
 
-        $response = $this->get("/api/users/list");
+        $this->expectException(Exception::class);
 
-        $response->assertStatus(Response::HTTP_BAD_REQUEST)->assertExactJson([
-            'error' => "Hubo un error al realizar la peticion"
-        ]);
+        $this->getUsersListService->execute();
     }
 }
