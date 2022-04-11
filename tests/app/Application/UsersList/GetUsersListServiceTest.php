@@ -38,7 +38,7 @@ class GetUsersListServiceTest extends TestCase
 
         $getUsersListService = $this->getUsersListService->execute();
 
-        $this->assertEquals($getUsersListService,[]);
+        $this->assertEquals($getUsersListService, []);
     }
 
     /**
