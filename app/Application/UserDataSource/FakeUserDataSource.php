@@ -22,4 +22,17 @@ class FakeUserDataSource implements UserDataSource
         }
         throw(new Exception('Usuario no encontrado'));
     }
+
+    public function listedUsers(): array
+    {
+        $random_number = rand(1,2);
+        if ($random_number == 1){
+            $user1 = new User(1, 'email@email.com');
+            $user2 = new User(2, 'email@email.com');
+            $user3 = new User(3, 'email@email.com');
+
+            return array($user1, $user2, $user3);
+        }
+        return [];
+    }
 }
