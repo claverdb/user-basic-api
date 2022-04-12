@@ -9,7 +9,7 @@ class FakeUserDataSource implements UserDataSource
 {
     public function findByEmail(string $email): User
     {
-        if($email == 'email@email.com') {
+        if ($email == 'email@email.com') {
             return new User(1, $email);
         }
         throw(new Exception('User not found'));
@@ -17,7 +17,7 @@ class FakeUserDataSource implements UserDataSource
 
     public function findById(int $id): User
     {
-        if($id == 1) {
+        if ($id == 1) {
             return new User($id, 'user@user.com');
         }
         throw(new Exception('Usuario no encontrado'));
